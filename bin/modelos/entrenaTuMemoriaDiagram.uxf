@@ -28,7 +28,7 @@ getNombre()
       <w>210</w>
       <h>210</h>
     </coordinates>
-    <panel_attributes>ControlJuego
+    <panel_attributes>ControlEntrenaTuMemoria
 --
 int ronda 
 array Carta listaCartas
