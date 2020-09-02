@@ -1,7 +1,7 @@
 package entrenaTuMemoria;
 
 public class Carta {
-	
+	//atributos
 	private String nombre;
 	private int posicion;
 	private boolean visible;

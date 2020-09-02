@@ -4,8 +4,8 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>310</x>
-      <y>490</y>
+      <x>350</x>
+      <y>470</y>
       <w>130</w>
       <h>120</h>
     </coordinates>
@@ -23,17 +23,17 @@ getNombre()
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>240</x>
-      <y>190</y>
+      <x>280</x>
+      <y>140</y>
       <w>210</w>
-      <h>210</h>
+      <h>220</h>
     </coordinates>
     <panel_attributes>ControlJuego
 --
 int ronda 
 array Carta listaCartas
 boolean modoVista
-int estado	
+boolean estado	
 str cartaEnJuego
 --
 ordenarCartas()
@@ -47,8 +47,8 @@ getCartaEnJuego()</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>40</x>
-      <y>240</y>
+      <x>80</x>
+      <y>220</y>
       <w>100</w>
       <h>90</h>
     </coordinates>
@@ -62,8 +62,8 @@ VistaGUI()</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>0</x>
-      <y>70</y>
+      <x>40</x>
+      <y>50</y>
       <w>200</w>
       <h>80</h>
     </coordinates>
@@ -75,20 +75,20 @@ main()</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>360</x>
-      <y>390</y>
+      <x>400</x>
+      <y>350</y>
       <w>60</w>
-      <h>120</h>
+      <h>140</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-
 m1=4-12</panel_attributes>
-    <additional_attributes>10.0;100.0;10.0;10.0</additional_attributes>
+    <additional_attributes>10.0;120.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>80</x>
-      <y>140</y>
+      <x>120</x>
+      <y>120</y>
       <w>30</w>
       <h>120</h>
     </coordinates>
@@ -98,24 +98,25 @@ m1=4-12</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>130</x>
-      <y>270</y>
+      <x>170</x>
+      <y>230</y>
       <w>130</w>
-      <h>40</h>
+      <h>50</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-
 m1=1</panel_attributes>
-    <additional_attributes>110.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>110.0;10.0;10.0;30.0</additional_attributes>
   </element>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>550</x>
+      <x>610</x>
       <y>0</y>
       <w>190</w>
       <h>190</h>
     </coordinates>
-    <panel_attributes>Note..
+    <panel_attributes>agregarCarta agrega cartas cuando se cambia de ronda
+
 bg=blue
 </panel_attributes>
     <additional_attributes/>
