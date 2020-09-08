@@ -15,7 +15,7 @@ public class ControlEntrenaTuMemoria {
 	
 	//constructor
 	public ControlEntrenaTuMemoria() {
-		this.ronda = 5;
+		this.ronda = 3;
 		python = new Carta("python");
 		java = new Carta("java");
 		javascript = new Carta("javaScript");
