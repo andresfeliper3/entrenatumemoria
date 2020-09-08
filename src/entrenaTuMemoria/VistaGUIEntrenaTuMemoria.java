@@ -4,7 +4,12 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.Timer;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -14,10 +19,9 @@ public class VistaGUIEntrenaTuMemoria extends JFrame {
 
 	//atributos
 	private ArrayList<JLabel> cartasEnJuego;
-	private JLabel cartaEscogida; //cartas que muestra el juego
-	private JLabel carta1, carta2, carta3, carta4, carta5, carta6, carta7, carta8, carta9, carta10, carta11, carta12;
 	private JLabel mensaje; //Indica lo que hay que hacer
 	private ImageIcon imagen;
+	private Timer timer;
 	
 	private ControlEntrenaTuMemoria controlEntrenaTuMemoria;
 	
@@ -40,27 +44,70 @@ public class VistaGUIEntrenaTuMemoria extends JFrame {
 	public void initGUI() {
 		//set up container - layout
 		Container contenedor = this.getContentPane();
-		contenedor.setLayout(new FlowLayout());
+		contenedor.setLayout(new GridLayout(3,3));
 				
 		//Objetos de escucha y control
 		controlEntrenaTuMemoria = new ControlEntrenaTuMemoria();
 		controlEntrenaTuMemoria.organizarCartasEnJuego();
 		
 		cartasEnJuego = new ArrayList<JLabel>();
-		//Componentes gráficos
+		//timer
+		Timer timer = new Timer();
 		
+		//Componentes gráficos
+		//Título
+		mensaje = new JLabel("Mira las imágenes por 30 segundos");
+		contenedor.add(mensaje);
 		
 		for(int i = 0; i < controlEntrenaTuMemoria.getCartasEnJuego().size(); i++) {
-			imagen = new ImageIcon("src/imagenes/" + controlEntrenaTuMemoria.getCartasEnJuego().get(i).getNombre() + ".png" );
+			imagen = new ImageIcon("src/imagenes/" + (i+1) + ".png" );
 			cartasEnJuego.add(new JLabel(imagen));
 			contenedor.add(cartasEnJuego.get(i));
 		}
 		
 		
-		
-		
+				
 		
 		
 		
 	}
+	
+	
+	private class Escucha implements MouseListener {
+		
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseExited(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+		
+	}
+
+	
+	
 }

@@ -20,7 +20,7 @@ public class ControlEntrenaTuMemoria {
 		java = new Carta("java");
 		javascript = new Carta("javaScript");
 		php = new Carta("php");
-		cplusplus = new Carta("c++");
+		cplusplus = new Carta("cplusplus");
 		rust = new Carta("rust");
 		swift = new Carta("swift");
 		ruby = new Carta("ruby");
