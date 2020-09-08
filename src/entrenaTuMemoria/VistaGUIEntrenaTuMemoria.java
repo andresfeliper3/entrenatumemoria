@@ -17,9 +17,11 @@ import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 
@@ -31,6 +33,10 @@ public class VistaGUIEntrenaTuMemoria extends JFrame {
 	private JPanel zonaCartas;
 	private ImageIcon imagen;
 	private Timer timer;
+	private boolean cartasVisibles;
+	private Escucha escucha;
+	private Icon icon;
+	private JFrame ventana;
 	
 	private ControlEntrenaTuMemoria controlEntrenaTuMemoria;
 	
@@ -51,6 +57,9 @@ public class VistaGUIEntrenaTuMemoria extends JFrame {
 	}
 	
 	public void initGUI() {
+		
+		//referencia a JFrame
+		ventana = this;
 		//set up container - layout
 		Container contenedor = this.getContentPane();
 		contenedor.setLayout(new GridBagLayout());
@@ -68,19 +77,27 @@ public class VistaGUIEntrenaTuMemoria extends JFrame {
 		Timer timer = new Timer("Timer");
 		TimerTask task = new TimerTask() {
 			public void run()		 {
+				controlEntrenaTuMemoria.setCartasVisibles(false);
 				 //Se ejecuta después de los 30 segundos
-				 for(int i = 0; i < controlEntrenaTuMemoria.getCartasEnJuego().size(); i++) {
-						imagen = new ImageIcon("src/imagenes/" + (i+1) + ".png" ); //carga las nuevas imágenes
-						cartasEnJuego.get(i).setIcon(imagen); //cambia las imágenes de los JLabel
-						mensaje.setText("si wenas, te toca adivinar"); //cambia el mensaje
-					}
-		        }
+				for(int i = 0; i < controlEntrenaTuMemoria.getCartasEnJuego().size(); i++) {
+					imagen = new ImageIcon("src/imagenes/" + (i+1) + ".png" ); //carga las nuevas imágenes
+					cartasEnJuego.get(i).setIcon(imagen); //cambia las imágenes de los JLabel
+						
+				}
+				mensaje.setText("si wenas, te toca adivinar"); //cambia el mensaje
+				
+		    }
 		};
 		timer.schedule(task, 3000);
 		
+		//Zona de cartas
+		zonaCartas = new JPanel();
+		zonaCartas.setLayout(new GridLayout(2,6));	
 		
-		//Zona del mensaje
-		mensaje = new JLabel("Mira las imágenes por 30 segundos");
+		//juego
+		empezarJuego();
+		
+		//MENSAJE
 		//restricciones
 		constraints.gridx = 0;
 		constraints.gridy = 0;
@@ -90,14 +107,14 @@ public class VistaGUIEntrenaTuMemoria extends JFrame {
 		//adición
 		add(mensaje, constraints);
 		
-		//Zona de cartas
-		zonaCartas = new JPanel();
-		zonaCartas.setLayout(new GridLayout(2,6));		
+			
 		
-		//Coloca todas las imágenes necesarias
+		//Coloca todas las imágenes necesarias	
 		for(int i = 0; i < controlEntrenaTuMemoria.getCartasEnJuego().size(); i++) {
 			imagen = new ImageIcon("src/imagenes/" + controlEntrenaTuMemoria.getCartasEnJuego().get(i).getNombre() + ".png" );
-			cartasEnJuego.add(new JLabel(imagen));
+			JLabel imagenCarta = new JLabel(imagen);
+			imagenCarta.addMouseListener(escucha); //agrega la escucha
+			cartasEnJuego.add(imagenCarta);	
 			zonaCartas.add(cartasEnJuego.get(i));
 		}
 		//restricciones
@@ -112,11 +129,23 @@ public class VistaGUIEntrenaTuMemoria extends JFrame {
 		add(zonaCartas, constraints);
 		 
 		
+	}
+	
+	private void empezarJuego() {
+		if(controlEntrenaTuMemoria.getRonda() == 1) {
+			icon = new ImageIcon("src/imagenes/" + controlEntrenaTuMemoria.getCartaEscogida().getNombre() + ".png");
+			mensaje = new JLabel("Mira las imágenes por 30 segundos", icon, 0);
+			
+		}
 		
-				
-		
-		
-		
+		cartasEnJuego.clear();
+		for(int i = 0; i < controlEntrenaTuMemoria.getCartasEnJuego().size(); i++) {
+			imagen = new ImageIcon("src/imagenes/" + controlEntrenaTuMemoria.getCartasEnJuego().get(i).getNombre() + ".png" );
+			JLabel imagenCarta = new JLabel(imagen);
+			imagenCarta.addMouseListener(escucha); //agrega la escucha
+			cartasEnJuego.add(imagenCarta);	
+			zonaCartas.add(cartasEnJuego.get(i));
+		}
 	}
 	
 	
@@ -125,7 +154,39 @@ public class VistaGUIEntrenaTuMemoria extends JFrame {
 		@Override
 		public void mouseClicked(MouseEvent eventMouse) {
 			// TODO Auto-generated method stub
-			
+			//Si las cartas no están visibles
+			if(!controlEntrenaTuMemoria.getCartasVisibles()) {
+				for(int i = 0; i < cartasEnJuego.size(); i++) {
+					//Revisa cuál JLabel fue clickeado
+					if(eventMouse.getSource() == cartasEnJuego.get(i)) {
+						//Control recibe la carta clickeada y luego determina el estado del juego
+						controlEntrenaTuMemoria.setCartaClickeada(controlEntrenaTuMemoria.getCartasEnJuego().get(i));
+						controlEntrenaTuMemoria.determinarEstadoJuego();
+					}
+				}
+				//
+				if(controlEntrenaTuMemoria.getEstado()) {		
+					icon = new ImageIcon("src/imagenes/" + controlEntrenaTuMemoria.getCartaEscogida().getNombre() + ".png");
+					mensaje.setText("Mira las imágenes por 30 segundos");
+					mensaje.setIcon(icon);
+					//
+					
+					ventana.pack();
+					for(int i = 0; i < controlEntrenaTuMemoria.getCartasEnJuego().size(); i++) {
+						imagen = new ImageIcon("src/imagenes/" + controlEntrenaTuMemoria.getCartasEnJuego().get(i).getNombre() + ".png" );
+						JLabel imagenCarta = new JLabel(imagen);
+						imagenCarta.addMouseListener(escucha); //agrega la escucha
+						cartasEnJuego.add(imagenCarta);	
+						zonaCartas.add(cartasEnJuego.get(i));
+						
+					}
+					
+					
+				}
+				else {
+					JOptionPane.showMessageDialog(null, "Perdiste");
+				}
+			}
 		}
 
 		@Override

@@ -10,12 +10,12 @@ public class ControlEntrenaTuMemoria {
 	private Carta cartaEscogida, cartaClickeada;
 	private ArrayList<Carta> cartasEnJuego, listaCartas;
 	private Carta python, java, javascript, php, cplusplus, rust, swift, ruby, go, racket, prolog, kotlin;
-	private boolean modoVista; //true si las cartas están visibles	
 	private boolean estado; //true:ganar. False: perder.
+	private boolean cartasVisibles;
 	
 	//constructor
 	public ControlEntrenaTuMemoria() {
-		this.ronda = 3;
+		this.ronda = 1;
 		python = new Carta("python");
 		java = new Carta("java");
 		javascript = new Carta("javaScript");
@@ -81,6 +81,11 @@ public class ControlEntrenaTuMemoria {
 		}
 		//revolver las posiciones de las cartas en cada partida
 		Collections.shuffle(cartasEnJuego);
+		this.cartasVisibles = true;
+		
+		//Escoger carta para que el usuario adivine
+		escogerCarta();
+		
 	}
 	
 	//Cambia de ronda si el usuario ha ganado
@@ -89,7 +94,7 @@ public class ControlEntrenaTuMemoria {
 		if(ronda < 5) {
 			ronda++;	
 		}
-		escogerCarta();
+		organizarCartasEnJuego();
 	}
 	//Escoge la carta en juego, que el usuario debe adivinar
 	private void escogerCarta() {
@@ -124,6 +129,19 @@ public class ControlEntrenaTuMemoria {
 	public void setCartaClickeada(Carta cartaClickeada) {
 		this.cartaClickeada = cartaClickeada;
 	}
+
+	//retorna true si las cartas están visibles y false en caso contrario
+	public boolean getCartasVisibles() {
+		return cartasVisibles;
+	}
+
 	
+	public void setCartasVisibles(boolean cartasVisibles) {
+		this.cartasVisibles = cartasVisibles;
+	}
+	
+	public int getRonda() {
+		return ronda;
+	}
 	
 }
