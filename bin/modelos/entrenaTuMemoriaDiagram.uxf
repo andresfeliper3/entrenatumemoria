@@ -5,7 +5,7 @@
     <id>UMLClass</id>
     <coordinates>
       <x>310</x>
-      <y>490</y>
+      <y>690</y>
       <w>130</w>
       <h>120</h>
     </coordinates>
@@ -24,17 +24,20 @@ getNombre()
     <id>UMLClass</id>
     <coordinates>
       <x>240</x>
-      <y>190</y>
+      <y>160</y>
       <w>210</w>
-      <h>210</h>
+      <h>270</h>
     </coordinates>
     <panel_attributes>ControlEntrenaTuMemoria
 --
 int ronda 
-array Carta listaCartas
+int numeroDeCartasEnRonda
+array cartas
+array cartasEnJuego
+Carta cartaEscogida
+Carta cartaEnJuego
 boolean modoVista
-int estado	
-str cartaEnJuego
+boolean estado
 --
 ordenarCartas()
 determinarEstadoJuego()
@@ -48,7 +51,7 @@ getCartaEnJuego()</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>40</x>
-      <y>240</y>
+      <y>210</y>
       <w>100</w>
       <h>90</h>
     </coordinates>
@@ -63,7 +66,7 @@ VistaGUI()</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>0</x>
-      <y>70</y>
+      <y>40</y>
       <w>200</w>
       <h>80</h>
     </coordinates>
@@ -76,19 +79,19 @@ main()</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>360</x>
-      <y>390</y>
+      <y>420</y>
       <w>60</w>
-      <h>120</h>
+      <h>290</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-
 m1=4-12</panel_attributes>
-    <additional_attributes>10.0;100.0;10.0;10.0</additional_attributes>
+    <additional_attributes>10.0;270.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>80</x>
-      <y>140</y>
+      <y>110</y>
       <w>30</w>
       <h>120</h>
     </coordinates>
@@ -99,7 +102,7 @@ m1=4-12</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>130</x>
-      <y>270</y>
+      <y>240</y>
       <w>130</w>
       <h>40</h>
     </coordinates>
@@ -110,12 +113,17 @@ m1=1</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>550</x>
-      <y>0</y>
-      <w>190</w>
+      <x>50</x>
+      <y>460</y>
+      <w>270</w>
       <h>190</h>
     </coordinates>
     <panel_attributes>Note..
+
+1-desordenar arreglo con todas las cartas 
+2-copiar los primeros elementos 
+f(ronda) y desordenar
+
 bg=blue
 </panel_attributes>
     <additional_attributes/>
