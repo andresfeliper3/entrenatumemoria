@@ -1,18 +1,20 @@
 package entrenaTuMemoria;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 
 public class ControlEntrenaTuMemoria {
 	
 	private int ronda; //número de la ronda actual
 	private int numeroDeCartasEnRonda; //Para hacer la array dinámica, se utiliza una variable auxiliar
-	private Carta[] cartas; //array de cartas actuales
-	private Carta[] cartasEnJuego;
+	private ArrayList<Carta> cartas; //array de cartas actuales
+	private ArrayList<Carta> cartasEnJuego;
 	private Carta cplusplus, java, javaScript, python, ruby, php, rust, kotlin, go, swift, prolog, racket; //Cartas que pueden usarse
 	private Carta cartaEnJuego;
 	private Carta cartaEscogida;
 	private boolean estado;
-	private boolean modoVista;
+	private boolean modoVista; //Boca arriba true, boca abajo false
 
 	
 	public ControlEntrenaTuMemoria() //Constructor
@@ -30,48 +32,43 @@ public class ControlEntrenaTuMemoria {
 		swift = new Carta("Swift");
 		prolog = new Carta("Prolog");
 		racket = new Carta("Racket");
-
+		ronda = 1;
+		estado= true;
 		
-		ronda = 1; //Inicia en la ronda 1
-		cartas = new Carta[12]; //12 cartas totales
-		numeroDeCartasEnRonda = 0;
-		cartasEnJuego = new Carta[numeroDeCartasEnRonda]; // 4 cartas primera ronda
+		cartas = new ArrayList<>(); 
+		cartasEnJuego = new ArrayList<>();
 		
 		//Agregar cartas a la lista de cartas
-		cartasEnJuego[0] = cplusplus;
-		cartasEnJuego[1] = java;
-		cartasEnJuego[2] = javaScript;
-		cartasEnJuego[3] = python;
-		cartasEnJuego[4] = ruby;
-		cartasEnJuego[5] = php;
-		cartasEnJuego[6] = rust;
-		cartasEnJuego[7] = go;
-		cartasEnJuego[8] = swift;
-		cartasEnJuego[9] = prolog;
-		cartasEnJuego[10] = racket;
-		cartasEnJuego[11] = kotlin;
+		cartas.add(cplusplus);
+		cartas.add(java);
+		cartas.add(javaScript);
+		cartas.add(python);
+		cartas.add(ruby);
+		cartas.add(php);
+		cartas.add(rust);
+		cartas.add(go);
+		cartas.add(swift);
+		cartas.add(prolog);
+		cartas.add(racket);
+		cartas.add(kotlin);
+		
 		
 		cartas = ordenarCartas(cartas); //Desordena todas las cartas al iniciar el juego
 		
 	}
 
 	//ordena aleatoriamente una lista de cartas
-	public Carta[] ordenarCartas(Carta[] lista)
+	private ArrayList<Carta> ordenarCartas(ArrayList<Carta> lista)
 	{
-		Random random = new Random();
-		for(int i=0;i< lista.length;i++)
-		{
-			int indiceRandom = random.nextInt(lista.length);
-			Carta cartaActual = lista[indiceRandom];
-			lista[indiceRandom] = lista[i];
-			lista[i] = cartaActual;
-		}
+		Collections.shuffle(lista);
 		return lista;
 	}
 	 
 	//Determina las cartas que se usarán en el juego
 	public void mostrarCartasEnJuego()
 	{
+		cartasEnJuego.clear();
+		
 		if(ronda == 1)
 		{
 			numeroDeCartasEnRonda = 4;
@@ -86,18 +83,23 @@ public class ControlEntrenaTuMemoria {
 		}
 		if(ronda == 4)
 		{
-			numeroDeCartasEnRonda = 10;
-		}
-		if(ronda >= 5)
-		{
 			numeroDeCartasEnRonda = 12;
 		}
 		
 		for(int i=0; i<numeroDeCartasEnRonda;i++)
 		{
-			cartasEnJuego[i] = cartas[i]; 
+			cartasEnJuego.add(cartas.get(i)); 
 		}
+		
 		cartasEnJuego = ordenarCartas(cartasEnJuego);
+		
+	}
+	//Pasar a la siguiente ronda
+	private void pasarRonda()
+	{
+			this.ronda++;
+		
+		getCartaEnJuego();
 	}
 	
 	//examina el estado del juego, si avanzas a la siguiente ronda o perdiste.
@@ -105,7 +107,9 @@ public class ControlEntrenaTuMemoria {
 	{
 		if(cartaEnJuego == cartaEscogida)
 		{
-			ronda = ronda+1; //avanza a la siguiente ronda
+			estado= true;
+			pasarRonda(); //avanza a la siguiente ronda
+			
 		}
 		else
 		{
@@ -114,42 +118,56 @@ public class ControlEntrenaTuMemoria {
 	}
 	
 	//voltea las cartas
-	public boolean voltearCarta() 
+	public void voltearCarta(boolean bolean) 
 	{
-		if(modoVista == false)
-		{
-		return modoVista = true;//boca arriba
-		}
-		else 
-		{
-		return modoVista = false;//boca abajo
-		}
+		this.modoVista = bolean;
 	}
 	
-	//Dice que carta escogió el usuario de la lista de cartas
-	public void CartaClickeada(int posicionCarta)
+	//Dice que carta escogió el usuario de la lista de cartas (GUI manda la posición de la carta escogida)
+	public void setCartaClickeada(int posicionCarta)
 	{
-		cartaEscogida = cartasEnJuego[posicionCarta-1];
+		this.cartaEscogida = cartasEnJuego.get(posicionCarta);
 	}
 	
 	//dice si la carta está boca abajo (false) o boca arriba (true)
-	public boolean getEstadoCarta()
+	public boolean getModoVista()
 	{
 		return modoVista;
 	}
 	//Escoge la carta a buscar en la ronda del juego de la lista de Cartas en Juego
-	public Carta getCartaEnJuego(Carta[] lista)
+	public void getCartaEnJuego()
 	{
 		Random random = new Random();
-		int posicionCarta = random.nextInt(lista.length);
-		cartaEnJuego = cartasEnJuego[posicionCarta];
-		return cartaEnJuego;
+		int posicionCarta = random.nextInt(cartasEnJuego.size());
+		cartaEnJuego = cartasEnJuego.get(posicionCarta);
 	}
 	
 	//retorna el número de la ronda que se está jugando
-	public int rondaActual()
+	public int getRondaActual()
 	{
 		return ronda;
 	}
 	
+	//retorna el estado del juego
+	public boolean getEstado()
+	{
+		return estado;
+	}
+	
+	//retorna el array de cartas en la ronda actual
+	public ArrayList<Carta> getCartasEnJuego()
+	{
+		return cartasEnJuego;
+	}
+	//Retorna la carta que se debe buscar
+	public Carta cualEsLaCarta()
+	{
+		return cartaEnJuego;
+	}
+		
+	//
+	public Carta getCartaEscogida()
+	{
+		return cartaEscogida;
+	}
 }
