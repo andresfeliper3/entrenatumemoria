@@ -35,7 +35,6 @@ public class VistaGUIEntrenaTuMemoria extends JFrame {
 	private Timer timer;
 	private boolean cartasVisibles;
 	private Escucha escucha;
-	private Icon icon;
 	private JFrame ventana;
 	private TimerTask task;
 	private ControlEntrenaTuMemoria controlEntrenaTuMemoria;
@@ -47,6 +46,7 @@ public class VistaGUIEntrenaTuMemoria extends JFrame {
 		
 		//Configuración de la ventana
 		this.setTitle("Entrena Tu Memoria");
+		this.setBackground(new Color(255,255,255));
 		this.setSize(900,900);
 		//this.pack();
 		this.setLocationRelativeTo(null);
@@ -58,8 +58,6 @@ public class VistaGUIEntrenaTuMemoria extends JFrame {
 	
 	public void initGUI() {
 		
-		//referencia a JFrame
-		ventana = this;
 		//set up container - layout
 		//Container contenedor = this.getContentPane();
 		//contenedor.setLayout(new GridBagLayout());
@@ -70,23 +68,35 @@ public class VistaGUIEntrenaTuMemoria extends JFrame {
 		Escucha escucha = new Escucha();
 		//Objetos de escucha y control
 		controlEntrenaTuMemoria = new ControlEntrenaTuMemoria();
-		controlEntrenaTuMemoria.organizarCartasEnJuego();
 		
+		//Lista de JLabels
 		cartasEnJuego = new ArrayList<JLabel>();
 		
-		
+		//Mensaje
+		Icon icon = new ImageIcon("src/imagenes/1.png");
+		mensaje = new JLabel("Espere 30 segundos, ronda actual " + controlEntrenaTuMemoria.getRonda(), icon, 0);
+				
+		//restricciones
+		constraints.gridx = 0;
+		constraints.gridy = 0;
+		//constraints.gridwidth = 2;
+		constraints.fill = GridBagConstraints.NONE;
+		constraints.anchor = GridBagConstraints.CENTER; //centrado
+		//adición
+		add(mensaje, constraints);
 		
 		//Zona de cartas
 		zonaCartas = new JPanel();
 		zonaCartas.setLayout(new GridLayout(2,6));	
+		zonaCartas.setBorder(new TitledBorder("Zona de Juego"));
+		zonaCartas.setBackground(Color.WHITE);
 		//restricciones
 		constraints.gridx = 0;
 		constraints.gridy= 1;
 		constraints.gridwidth = 1;
 		constraints.gridheight = 1;
 		constraints.fill = GridBagConstraints.LAST_LINE_END;
-		//zonaCartas.setPreferredSize(new Dimension(400,400));
-		zonaCartas.setBorder(new TitledBorder("Zona de Juego"));
+		//zonaCartas.setPreferredSize(new Dimension(400,400));	
 		//adición
 		add(zonaCartas, constraints);
 		
@@ -101,22 +111,14 @@ public class VistaGUIEntrenaTuMemoria extends JFrame {
 					cartasEnJuego.get(i).setIcon(imagen); //cambia las imágenes de los JLabel
 					cartasEnJuego.get(i).addMouseListener(escucha);		
 				}
-				mensaje.setText("si wenas, te toca adivinar"); //cambia el mensaje
+				mensaje.setText("si wenas, te toca adivinar");//cambia el mensaje
+				Icon icon = new ImageIcon("src/imagenes/" + controlEntrenaTuMemoria.getCartaEscogida().getNombre() + ".png");
+				mensaje.setIcon(icon);
 						
 			}
 		};
 	
-		//Mensaje
-		icon = new ImageIcon("src/imagenes/" + controlEntrenaTuMemoria.getCartaEscogida().getNombre() + ".png");
-		mensaje = new JLabel("Mira las imágenes por 30 segundos", icon, 0);
-		//restricciones
-		constraints.gridx = 0;
-		constraints.gridy = 0;
-		//constraints.gridwidth = 2;
-		constraints.fill = GridBagConstraints.NONE;
-		constraints.anchor = GridBagConstraints.CENTER; //centrado
-		//adición
-		add(mensaje, constraints);
+			
 		
 		//juego
 		empezarJuego(); //primera ronda
@@ -143,7 +145,9 @@ public class VistaGUIEntrenaTuMemoria extends JFrame {
 		controlEntrenaTuMemoria.setCartasVisibles(true);
 		
 		if(controlEntrenaTuMemoria.getRonda() == 1) {
+			controlEntrenaTuMemoria.organizarCartasEnJuego();
 			mostrarCartas();
+			
 			timer.schedule(task, 3000);
 		} 
 		else if(controlEntrenaTuMemoria.getRonda() >= 2 ) {
