@@ -14,7 +14,7 @@ public class ControlEntrenaTuMemoria {
 	private Carta cartaEnJuego;
 	private Carta cartaEscogida;
 	private boolean estado;
-	private boolean modoVista;
+	private boolean modoVista; //Boca arriba true, boca abajo false
 
 	
 	public ControlEntrenaTuMemoria() //Constructor
@@ -118,16 +118,9 @@ public class ControlEntrenaTuMemoria {
 	}
 	
 	//voltea las cartas
-	public boolean voltearCarta() 
+	public void voltearCarta(boolean bolean) 
 	{
-		if(modoVista == false)
-		{
-		return modoVista = true;//boca arriba
-		}
-		else 
-		{
-		return modoVista = false;//boca abajo
-		}
+		this.modoVista = bolean;
 	}
 	
 	//Dice que carta escogió el usuario de la lista de cartas (GUI manda la posición de la carta escogida)
