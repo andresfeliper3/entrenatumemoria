@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
@@ -21,25 +22,29 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
+
+
 
 public class VistaGUIEntrenaTuMemoria extends JFrame {
 
 	//atributos
 	
-		private JLabel mensaje;
+		private JLabel mensaje,carta,ronda;
 		private ImageIcon imagen;
 		private ArrayList<JLabel> cartasEnJuego;
 		private Escucha escucha;
 		private ControlEntrenaTuMemoria controlMemoria;
-		private Timer timer;
-		private JPanel zonaCartas;
+		private Timer timer,timer2;
+		private JPanel zonaCartas,zonaTop,zonaMensaje,zonaRonda;
 		private JFrame referenciaGUI;
+		private int contador;
 
 	//métodos
 	
-	public VistaGUIEntrenaTuMemoria() //Constructor
-	{		
+	public VistaGUIEntrenaTuMemoria(){ //Constructor
+			
 		initGUI();
 		
 		//default config
@@ -51,7 +56,6 @@ public class VistaGUIEntrenaTuMemoria extends JFrame {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setVisible(true);
 
-		
 	}
 		private void initGUI() {
 
@@ -70,16 +74,53 @@ public class VistaGUIEntrenaTuMemoria extends JFrame {
 			
 			//set up GUIComponents add to window
 			
-			//Mensaje
-			Icon iconoTiempo =  new ImageIcon("src/imagenes/tiempo.gif");
-			mensaje = new JLabel("Por favor espere 30 segundos \n ronda actual: " + controlMemoria.getRondaActual(),iconoTiempo,0);
-			//Restricciones
+			//zona Ronda
+			zonaRonda = new JPanel();
+			zonaRonda.setBackground(Color.WHITE);
+			
+			//Ronda
+			ronda = new JLabel("Ronda: " + controlMemoria.getRondaActual());
+			ronda.setFont(new Font("Comic Sans MS", Font.ITALIC, 20));
+			zonaRonda.add(ronda);
+			
+			//restricciones
 			constraints.gridx=0; 
 			constraints.gridy=0;
 			constraints.gridwidth=2;
-			constraints.fill=GridBagConstraints.CENTER;
-			add(mensaje,constraints);
+			constraints.fill=GridBagConstraints.HORIZONTAL;
+			add(zonaRonda,constraints);
 			
+			//Zona TOP
+			zonaTop = new JPanel();
+			zonaTop.setBackground(Color.WHITE);
+			
+			//Carta
+			Icon iconoTiempo =  new ImageIcon("src/imagenes/tiempo.gif");
+			carta = new JLabel(iconoTiempo);
+			Border border = BorderFactory.createLineBorder(Color.BLACK, 5);
+			carta.setBorder(border);
+			zonaTop.add(carta);
+			
+			//restricciones
+			constraints.gridx=0; 
+			constraints.gridy=1;
+			constraints.gridwidth=2;
+			constraints.fill=GridBagConstraints.HORIZONTAL;
+			add(zonaTop,constraints);
+			
+			//Zona Mensaje
+			zonaMensaje = new JPanel();
+			zonaMensaje.setBackground(Color.WHITE);
+			//mensaje
+			mensaje = new JLabel("Espere 30 segundos");
+			mensaje.setFont(new Font("Comic Sans MS", Font.ITALIC, 20));
+			zonaMensaje.add(mensaje);
+			constraints.gridx=0; 
+			constraints.gridy=2;
+			constraints.gridwidth=2;
+			constraints.fill=GridBagConstraints.HORIZONTAL;
+			add(zonaMensaje,constraints);
+						
 			//Zona de cartas
 			zonaCartas = new JPanel();
 			zonaCartas.setBorder(new TitledBorder("Cartas en juego"));
@@ -87,7 +128,7 @@ public class VistaGUIEntrenaTuMemoria extends JFrame {
 
 			//Restricciones
 			constraints.gridx=0; 
-			constraints.gridy=1;
+			constraints.gridy=3;
 			constraints.gridwidth=1; //Ocupa una columna
 			constraints.gridheight=1; //Ocupa una fila
 			constraints.fill=GridBagConstraints.LAST_LINE_END;
@@ -96,139 +137,158 @@ public class VistaGUIEntrenaTuMemoria extends JFrame {
 			//Empieza el Juego
 			empezarJuego();
 		}
+		
 		//Método que se encarga de repintar el juego dependiendo de la ronda en que se encuentre
-		private void empezarJuego()
-		{
-			if(controlMemoria.getRondaActual()>=2) {
-				
-				zonaCartas.removeAll();
-				zonaCartas.repaint();
-
-			cartasEnJuego.clear();
-			controlMemoria.mostrarCartasEnJuego();
-			crearCartasEnJuego();
-			nuevaRonda();
+		private void empezarJuego(){
 			
-			mensaje.setText("Por favor espere 30 segundos \n ronda actual: " + controlMemoria.getRondaActual());
-			Icon iconoTiempo =  new ImageIcon("src/imagenes/tiempo.gif");
-			mensaje.setIcon(iconoTiempo);
-			
+			//Ejecución del timer
 			timer = new Timer("Timer");
-			TimerTask task = new TimerTask() {
+			TimerTask task = new TimerTask(){
 				public void run() {
-					ocultarCartas(); //oculta las cartas
+					mensaje.setText("Por favor espere " + contador + " segundos");
+					contador--;
+						if(contador<0){
+							ocultarCartas();
+							cancel();
+						}
 				}
 			};
 			
-			timer.schedule(task,3000);
-			}
-			else //exclusivo de la primera ronda
+			zonaCartas.removeAll();
+			zonaCartas.repaint();
+
+			cartasEnJuego.clear();
+			controlMemoria.mostrarCartasEnJuego();	
+			crearCartasEnJuego();
+			redimensionarVentana();
+			
+			Border border = BorderFactory.createLineBorder(Color.BLACK, 5);
+			ronda.setText("Ronda: " + controlMemoria.getRondaActual());
+			mensaje.setText("Por favor espere 30 segundos");
+			Icon iconoTiempo =  new ImageIcon("src/imagenes/tiempo.gif");
+			carta.setIcon(iconoTiempo);
+			carta.setBorder(border);
+
+			if(controlMemoria.getModoVista())
 			{
-				controlMemoria.mostrarCartasEnJuego();
-				controlMemoria.getCartaEnJuego();	
-				crearCartasEnJuego();
-				nuevaRonda();
-				
-				timer = new Timer("Timer");
-				TimerTask task = new TimerTask() {
-					public void run() {
-						ocultarCartas();//oculta las cartas	
-					}
-				};
-				timer.schedule(task,3000);
+				contador=5;
+				timer.scheduleAtFixedRate(task, 0, 1000);
 			}
+			
 		}
 
 		//devuelve el ancho que debería tener el JPanel "zonaCartas" dependiendo de las cartas que hayan en juego
-		private int getDimensionX(ControlEntrenaTuMemoria control)
-		{
-			if(control.getRondaActual()==1)
-			{
+		private int getDimensionX(ControlEntrenaTuMemoria control){
+			
+			if(control.getRondaActual()==1){
+				
 				return 360;
-			}if(control.getRondaActual()==2) 
-			{	
+			}
+			if(control.getRondaActual()==2){
+				
 				return 480;
 			}
-			else //ronda >= 3
-			{
-				return 620;
+			if(control.getRondaActual()==4){
+				
+				return 800;
+			}
+			else{ //ronda >= 3
+			
+				return 660;
 			}
 
 		}
 		
 		//devuelve el alto que debería tener el JPanel "zonaCartas" dependiendo de las cartas que hayan en juego
-		private int getDimensionY(ControlEntrenaTuMemoria control) {
+		private int getDimensionY(ControlEntrenaTuMemoria control){
 			
-			if(control.getRondaActual()==1 || control.getRondaActual()==2 || control.getRondaActual()==3)
-			{
-				return 280;
+			if(control.getRondaActual()==1 || control.getRondaActual()==2 || control.getRondaActual()==3 || control.getRondaActual()==4){
+				return 300;
 			}
-			else//ronda > 3
-			{
-				return 420;
+			else{//ronda > 3
+			
+				return 440;
 			}
 		}
 		
 		//voltea las cartas boca abajo
-		private void ocultarCartas()
-		{
-			controlMemoria.voltearCarta(false); //voltea las cartas boca abajo, y re-asigna nuevo icono y mensaje al JLabel mensaje
-			for(int i=0; i < controlMemoria.getCartasEnJuego().size();i++)
-			{
+		private void ocultarCartas(){
+			
+			controlMemoria.voltearCartas(false); //voltea las cartas boca abajo, y re-asigna nuevo icono y mensaje al JLabel mensaje
+			Border border = BorderFactory.createLineBorder(Color.BLACK, 5);
+			for(int i=0; i < controlMemoria.getCartasEnJuego().size();i++){
+				
 				imagen = new ImageIcon("src/imagenes/" + (i+1) + ".png" );
 				cartasEnJuego.get(i).setIcon(imagen);
+				cartasEnJuego.get(i).setBorder(border);
 			}
 			
 			mensaje.setText("¿Dónde está " + controlMemoria.cualEsLaCarta().getNombre() +"?");
 			Icon icono =  new ImageIcon("src/imagenes/"+controlMemoria.cualEsLaCarta().getNombre()+".png");
-			mensaje.setIcon(icono);
+			carta.setIcon(icono);
 		}
 		
 		//determina la cantidad de cartas tipo JLabel y asigna una escucha a cada uno de los elementos JLabel que deben haber en el ArrayList cartasEnJuego
 		private void crearCartasEnJuego()
 		{
-			controlMemoria.voltearCarta(true); //voltea las cartas boca arriba
+			controlMemoria.voltearCartas(true); //voltea las cartas boca arriba
+			Border border = BorderFactory.createLineBorder(Color.BLACK, 5);
 			
 			for(int i = 0; i < controlMemoria.getCartasEnJuego().size(); i++) {
 				imagen = new ImageIcon("src/imagenes/" + controlMemoria.getCartasEnJuego().get(i).getNombre() + ".png" );
 				cartasEnJuego.add(new JLabel(imagen));
 				cartasEnJuego.get(i).addMouseListener(escucha); //cada elemento le asiga una escucha de Mouse
+				cartasEnJuego.get(i).setBorder(border);
 				zonaCartas.add(cartasEnJuego.get(i));
 			}
 		}
 		
 		//redimensiona la ventana dependiendo de la ronda
-		private void nuevaRonda()
+		private void redimensionarVentana()
 		{
 			zonaCartas.setPreferredSize(new Dimension(getDimensionX(controlMemoria),getDimensionY(controlMemoria)));
 			referenciaGUI.pack();
+
 		}
 
-class Escucha implements ActionListener,MouseListener{
+class Escucha implements MouseListener{
 
 	@Override
-	public void mouseClicked(MouseEvent eventMouse) {
+	public void mouseClicked(MouseEvent eventMouse){
 		// TODO Auto-generated method stub
 		
-		for(int i=0;i<cartasEnJuego.size();i++)
-		{
-			if(eventMouse.getSource() == cartasEnJuego.get(i))//busca cuál carta le dio click
-			{
-				controlMemoria.setCartaClickeada(i);
-				controlMemoria.determinarEstadoJuego();
+		if(controlMemoria.getModoVista()==false){//Mira si las cartas están boca abajo (modoVista=false)
+		
+			for(int i=0;i<cartasEnJuego.size();i++){
 				
-				if(controlMemoria.getEstado()==true)
-				{
-					JOptionPane.showMessageDialog(cartasEnJuego.get(i),"GANASTE " + controlMemoria.getRondaActual() + " " + controlMemoria.getCartaEscogida().getNombre());				
-					empezarJuego();
-					break;
-				}
-				else
-				{
-					JOptionPane.showMessageDialog(cartasEnJuego.get(i),"PERDISTE BRO " + controlMemoria.cualEsLaCarta().getNombre() + " " + controlMemoria.getCartaEscogida().getNombre());
-					break;
-				}
-			}	
+				if(eventMouse.getSource() == cartasEnJuego.get(i)){//busca cuál carta le dio click
+					controlMemoria.setCartaClickeada(i);
+					controlMemoria.determinarEstadoJuego();
+					
+					Icon icono;
+					icono  = new ImageIcon("src/imagenes/"+controlMemoria.getCartaEscogida().getNombre()+".png");
+					
+					//Mensaje de resultado cuando gana
+					String ganaste = "\nEscogiste la carta: "+controlMemoria.getCartaEscogida().getNombre() 
+								    +"\npasaste a la ronda #" +controlMemoria.getRondaActual() 
+							        +" \n¡Buena suerte en la siguiente ronda!";
+					//Mensaje de resultado cuando pierde
+					String perdiste = "\nEscogiste la carta: "+controlMemoria.getCartaEscogida().getNombre() 
+									 +"\ndevuelvete a la ronda #" +controlMemoria.getRondaActual()
+									 +"\n¡Buena suerte en la próxima vez!";
+					
+					if(controlMemoria.getEstado()==true){
+						JOptionPane.showMessageDialog(cartasEnJuego.get(i),"   ¡¡¡ C O R R E C T O !!!"+ganaste,"PASASTE",JOptionPane.DEFAULT_OPTION,icono);				
+						empezarJuego();
+						break;
+					}
+					else{
+						JOptionPane.showMessageDialog(cartasEnJuego.get(i),"   ¡¡¡ I N C O R R E C T O !!!"+perdiste,"NO PASASTE",JOptionPane.DEFAULT_OPTION,icono);
+						empezarJuego();
+						break;
+					}
+				}	
+			}
 		}
 	}
 
@@ -249,7 +309,6 @@ class Escucha implements ActionListener,MouseListener{
 		// TODO Auto-generated method stub
 
 	}
-	
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
@@ -257,11 +316,6 @@ class Escucha implements ActionListener,MouseListener{
 		
 	}
 
-	@Override 
-	public void actionPerformed(ActionEvent actionEvent) {//Timer
-		// TODO Auto-generated method stub
-
-	}
   }
 }
 
