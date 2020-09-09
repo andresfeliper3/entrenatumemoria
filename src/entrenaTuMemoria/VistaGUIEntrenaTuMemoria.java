@@ -177,7 +177,7 @@ public class VistaGUIEntrenaTuMemoria extends JFrame {
 		mostrarCartas();	
 		redimensionar();
 		mensaje.setText("Por favor espere 30 segundos \n");
-		Icon iconoTiempo =  new ImageIcon("src/imagenes/1.png");
+		Icon iconoTiempo =  new ImageIcon("src/imagenes/tiempo.gif");
 		mensaje.setIcon(iconoTiempo);	
 
 		timer = new Timer("Timer");
