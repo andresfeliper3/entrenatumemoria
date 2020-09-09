@@ -11,8 +11,7 @@ public class PrincipalEntrenaTuMemoria {
 			public void run() {
 				
 				VistaGUIEntrenaTuMemoria myWindow = new VistaGUIEntrenaTuMemoria();
-				//ControlEntrenaTuMemoria control = new ControlEntrenaTuMemoria();
-				//System.out.println(control.getCartasEnJuego()[0].getNombre());
+				
 			}
 		});
 	}

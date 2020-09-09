@@ -36,8 +36,8 @@ public class VistaGUIEntrenaTuMemoria extends JFrame {
 	private boolean cartasVisibles;
 	private Escucha escucha;
 	private JFrame ventana;
-	private TimerTask task;
 	private ControlEntrenaTuMemoria controlEntrenaTuMemoria;
+	private JFrame referenciaGUI;
 	
 	//métodos
 	//constructor
@@ -47,8 +47,8 @@ public class VistaGUIEntrenaTuMemoria extends JFrame {
 		//Configuración de la ventana
 		this.setTitle("Entrena Tu Memoria");
 		this.setBackground(new Color(255,255,255));
-		this.setSize(900,900);
-		//this.pack();
+		//this.setSize(900,900);
+		this.pack();
 		this.setLocationRelativeTo(null);
 		this.setResizable(false);
 		this.setVisible(true);
@@ -57,7 +57,7 @@ public class VistaGUIEntrenaTuMemoria extends JFrame {
 	}
 	
 	public void initGUI() {
-		
+		referenciaGUI = this;
 		//set up container - layout
 		//Container contenedor = this.getContentPane();
 		//contenedor.setLayout(new GridBagLayout());
@@ -65,7 +65,7 @@ public class VistaGUIEntrenaTuMemoria extends JFrame {
 		GridBagConstraints constraints = new GridBagConstraints();
 		
 		//escucha
-		Escucha escucha = new Escucha();
+		escucha = new Escucha();
 		//Objetos de escucha y control
 		controlEntrenaTuMemoria = new ControlEntrenaTuMemoria();
 		
@@ -75,11 +75,11 @@ public class VistaGUIEntrenaTuMemoria extends JFrame {
 		//Mensaje
 		Icon icon = new ImageIcon("src/imagenes/1.png");
 		mensaje = new JLabel("Espere 30 segundos, ronda actual " + controlEntrenaTuMemoria.getRonda(), icon, 0);
-				
+		
 		//restricciones
 		constraints.gridx = 0;
 		constraints.gridy = 0;
-		//constraints.gridwidth = 2;
+		constraints.gridwidth = 2;
 		constraints.fill = GridBagConstraints.NONE;
 		constraints.anchor = GridBagConstraints.CENTER; //centrado
 		//adición
@@ -87,7 +87,7 @@ public class VistaGUIEntrenaTuMemoria extends JFrame {
 		
 		//Zona de cartas
 		zonaCartas = new JPanel();
-		zonaCartas.setLayout(new GridLayout(2,6));	
+	//	zonaCartas.setLayout(new FlowLayout());	
 		zonaCartas.setBorder(new TitledBorder("Zona de Juego"));
 		zonaCartas.setBackground(Color.WHITE);
 		//restricciones
@@ -95,79 +95,105 @@ public class VistaGUIEntrenaTuMemoria extends JFrame {
 		constraints.gridy= 1;
 		constraints.gridwidth = 1;
 		constraints.gridheight = 1;
-		constraints.fill = GridBagConstraints.LAST_LINE_END;
+		constraints.fill = GridBagConstraints.NONE;
+		
 		//zonaCartas.setPreferredSize(new Dimension(400,400));	
 		//adición
 		add(zonaCartas, constraints);
-		
-		timer = new Timer("Timer");
-		task = new TimerTask() {
-			//PROBAR QUITAR ESCUCHAS DEL TIMER, COLOCARLAS EN MÉTODO Y COLOCAR TIMER EN EL MÉTODO
-			public void run()		 {
-				controlEntrenaTuMemoria.setCartasVisibles(false);
-				 //Se ejecuta después de los 30 segundos
-				for(int i = 0; i < controlEntrenaTuMemoria.getCartasEnJuego().size(); i++) {
-					imagen = new ImageIcon("src/imagenes/" + (i+1) + ".png" ); //carga las nuevas imágenes
-					cartasEnJuego.get(i).setIcon(imagen); //cambia las imágenes de los JLabel
-					cartasEnJuego.get(i).addMouseListener(escucha);		
-				}
-				mensaje.setText("si wenas, te toca adivinar");//cambia el mensaje
-				Icon icon = new ImageIcon("src/imagenes/" + controlEntrenaTuMemoria.getCartaEscogida().getNombre() + ".png");
-				mensaje.setIcon(icon);
-						
-			}
-		};
 	
-			
-		
 		//juego
-		empezarJuego(); //primera ronda
-		
+		empezarJuego(); //primera ronda	
 		
 	}
 	
 	//Muestra las cartas en pantalla
 	private void mostrarCartas() {
+		controlEntrenaTuMemoria.setCartasVisibles(true);
+		
 		for(int i = 0; i < controlEntrenaTuMemoria.getCartasEnJuego().size(); i++) {
 			imagen = new ImageIcon("src/imagenes/" + controlEntrenaTuMemoria.getCartasEnJuego().get(i).getNombre() + ".png" );
-			cartasEnJuego.add(new JLabel(imagen));	
+			cartasEnJuego.add(new JLabel(imagen));
 			zonaCartas.add(cartasEnJuego.get(i));
-			System.out.println(cartasEnJuego.get(i));
+			//cartasEnJuego.get(i).addMouseListener(escucha);//antes no estaba
+			//System.out.println(cartasEnJuego.get(i));
 			System.out.println(controlEntrenaTuMemoria.getCartasEnJuego().get(i).getNombre());
 		}
 		
 		
 	}
 	
-	private void empezarJuego() {
+	private void ocultarCartas() {
+		controlEntrenaTuMemoria.setCartasVisibles(false);
+		 //Se ejecuta después de los 30 segundos
 		
-		
-		controlEntrenaTuMemoria.setCartasVisibles(true);
-		
-		if(controlEntrenaTuMemoria.getRonda() == 1) {
-			controlEntrenaTuMemoria.organizarCartasEnJuego();
-			mostrarCartas();
-			
-			timer.schedule(task, 3000);
-		} 
-		else if(controlEntrenaTuMemoria.getRonda() >= 2 ) {
-			zonaCartas.removeAll();
-			zonaCartas.repaint();
-			cartasEnJuego.clear();
-			mostrarCartas();	
-			//POR QUÉ NO SIRVE SI NO SE IMPRIME'?????
-			mensaje.setText("Por favor espere 30 segundos \n ronda actual: " + controlEntrenaTuMemoria.getRonda());
-			Icon iconoTiempo =  new ImageIcon("src/imagenes/1.png");
-			mensaje.setIcon(iconoTiempo);	
-			System.out.println("tamaño del array " + cartasEnJuego.size());
-			timer.schedule(task,3000);
-			
+		for(int i = 0; i < controlEntrenaTuMemoria.getCartasEnJuego().size(); i++) {
+			imagen = new ImageIcon("src/imagenes/" + (i+1) + ".png" ); //carga las nuevas imágenes
+			cartasEnJuego.get(i).setIcon(imagen); //cambia las imágenes de los JLabel
+			cartasEnJuego.get(i).addMouseListener(escucha);		
 		}
+		mensaje.setText("¿Dónde está " + controlEntrenaTuMemoria.getCartaEscogida().getNombre() + "?");//cambia el mensaje
+		Icon icono = new ImageIcon("src/imagenes/" + controlEntrenaTuMemoria.getCartaEscogida().getNombre() + ".png");
+		mensaje.setIcon(icono);
+	}
 		
+	//devuelve el ancho que debería tener el JPanel "zonaCartas" dependiendo de las cartas que hayan en juego
+	private int setDimensionX() {
+		if(controlEntrenaTuMemoria.getRonda() == 1){
+			return 360;
+		} 
+		else if(controlEntrenaTuMemoria.getRonda() == 2) {	
+			return 480;
+		}
+		 //ronda >= 3
+		else{
+			return 620;
+		}
+	}
+		
+	//devuelve el alto que debería tener el JPanel "zonaCartas" dependiendo de las cartas que hayan en juego
+	private int setDimensionY() {
+					
+		if(controlEntrenaTuMemoria.getRonda()==1 || controlEntrenaTuMemoria.getRonda()==2 || controlEntrenaTuMemoria.getRonda()==3){
+			return 280;
+		}
+		//ronda > 3
+		else{
+			return 420;
+		}
+	}
+
+	
+	private void redimensionar() {
+		zonaCartas.setPreferredSize(new Dimension(setDimensionX(),setDimensionY()));
+		referenciaGUI.pack();
 		
 	}
 	
+	private void empezarJuego() {
+		controlEntrenaTuMemoria.organizarCartasEnJuego();
+		zonaCartas.removeAll();
+		zonaCartas.repaint();
+		cartasEnJuego.clear();
+		mostrarCartas();	
+		redimensionar();
+		mensaje.setText("Por favor espere 30 segundos \n");
+		Icon iconoTiempo =  new ImageIcon("src/imagenes/1.png");
+		mensaje.setIcon(iconoTiempo);	
+
+		timer = new Timer("Timer");
+		TimerTask task = new TimerTask() {
+				
+			public void run()		 {
+				ocultarCartas();
+			}
+		};
+		timer.schedule(task,3000);
+			
+			
+	}
 	
+	
+
 	private class Escucha implements MouseListener {
 		
 		@Override
@@ -187,12 +213,13 @@ public class VistaGUIEntrenaTuMemoria extends JFrame {
 				//
 				if(controlEntrenaTuMemoria.getEstado()) {		
 						
-					JOptionPane.showMessageDialog(null, "Ganaste");
+					JOptionPane.showMessageDialog(referenciaGUI, "Ganaste");
 					empezarJuego();
 					
 				}
 				else {
-					JOptionPane.showMessageDialog(null, "Perdiste");
+					JOptionPane.showMessageDialog(referenciaGUI, "Perdiste");
+					empezarJuego();
 					
 				}
 			}

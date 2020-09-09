@@ -16,11 +16,11 @@ public class ControlEntrenaTuMemoria {
 	//constructor
 	public ControlEntrenaTuMemoria() {
 		this.ronda = 1;
-		python = new Carta("python");
-		java = new Carta("java");
-		javascript = new Carta("javaScript");
-		php = new Carta("php");
-		cplusplus = new Carta("cplusplus");
+		python = new Carta("Python");
+		java = new Carta("Java");
+		javascript = new Carta("JavaScript");
+		php = new Carta("PHP");
+		cplusplus = new Carta("C++");
 		rust = new Carta("rust");
 		swift = new Carta("swift");
 		ruby = new Carta("ruby");
@@ -91,10 +91,13 @@ public class ControlEntrenaTuMemoria {
 	//Cambia de ronda si el usuario ha ganado
 	private void pasarRonda() {
 		//Cambia de ronda si el usuario a ganado
-		if(ronda < 5) {
+		if(ronda < 5 && estado) {
 			ronda++;	
 		}
-		organizarCartasEnJuego();
+		else if(ronda > 1 && !estado) {
+			ronda--;
+		}
+		
 	}
 	//Escoge la carta en juego, que el usuario debe adivinar
 	private void escogerCarta() {
@@ -110,6 +113,7 @@ public class ControlEntrenaTuMemoria {
 		} 
 		else {
 			estado = false; //Derrota
+			pasarRonda();
 		}
 	}
 	
