@@ -30,7 +30,7 @@ public class VistaGUIEntrenaTuMemoria extends JFrame {
 	//atributos
 	private ArrayList<JLabel> cartasEnJuego;
 	private JLabel mensaje; //Indica lo que hay que hacer
-	private JPanel zonaCartas;
+	private JPanel zonaCartas, zonaMensaje;
 	private ImageIcon imagen;
 	private Timer timer;
 	private boolean cartasVisibles;
@@ -72,22 +72,27 @@ public class VistaGUIEntrenaTuMemoria extends JFrame {
 		//Lista de JLabels
 		cartasEnJuego = new ArrayList<JLabel>();
 		
-		//Mensaje
-		Icon icon = new ImageIcon("src/imagenes/1.png");
-		mensaje = new JLabel("Espere 30 segundos, ronda actual " + controlEntrenaTuMemoria.getRonda(), icon, 0);
-		
+		//Zona mensaje
+		zonaMensaje = new JPanel();
+		zonaMensaje.setBackground(Color.white);
 		//restricciones
 		constraints.gridx = 0;
 		constraints.gridy = 0;
 		constraints.gridwidth = 2;
-		constraints.fill = GridBagConstraints.NONE;
+		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.anchor = GridBagConstraints.CENTER; //centrado
+		add(zonaMensaje, constraints);
+		
+		//Mensaje
+		Icon icon = new ImageIcon("src/imagenes/1.png");
+		mensaje = new JLabel("Espere 30 segundos, ronda actual " + controlEntrenaTuMemoria.getRonda(), icon, 0);	
+		zonaMensaje.add(mensaje);
 		//adición
-		add(mensaje, constraints);
+		zonaMensaje.add(mensaje, constraints);
 		
 		//Zona de cartas
 		zonaCartas = new JPanel();
-	//	zonaCartas.setLayout(new FlowLayout());	
+		//zonaCartas.setLayout(new FlowLayout());	
 		zonaCartas.setBorder(new TitledBorder("Zona de Juego"));
 		zonaCartas.setBackground(Color.WHITE);
 		//restricciones
@@ -95,9 +100,7 @@ public class VistaGUIEntrenaTuMemoria extends JFrame {
 		constraints.gridy= 1;
 		constraints.gridwidth = 1;
 		constraints.gridheight = 1;
-		constraints.fill = GridBagConstraints.NONE;
-		
-		//zonaCartas.setPreferredSize(new Dimension(400,400));	
+		constraints.fill = GridBagConstraints.NONE;		
 		//adición
 		add(zonaCartas, constraints);
 	

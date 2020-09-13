@@ -21,13 +21,13 @@ public class ControlEntrenaTuMemoria {
 		javascript = new Carta("JavaScript");
 		php = new Carta("PHP");
 		cplusplus = new Carta("C++");
-		rust = new Carta("rust");
-		swift = new Carta("swift");
-		ruby = new Carta("ruby");
-		go = new Carta("go");
-	    racket = new Carta("racket");
-		prolog = new Carta("prolog");
-		kotlin = new Carta("kotlin");
+		rust = new Carta("Rust");
+		swift = new Carta("Swift");
+		ruby = new Carta("Ruby");
+		go = new Carta("Go");
+	    racket = new Carta("Racket");
+		prolog = new Carta("Prolog");
+		kotlin = new Carta("Kotlin");
 		
 		listaCartas = new ArrayList<Carta>();
 		cartasEnJuego = new ArrayList<Carta>();
