@@ -68,22 +68,25 @@ public class ControlEntrenaTuMemoria {
 		
 		cartasEnJuego.clear();
 		
-		if(ronda == 1){
+		switch(ronda)
+		{
+		case 1:
 			numeroDeCartasEnRonda = 4;
-		}
-		if(ronda == 2){
+			break;
+		case 2:
 			numeroDeCartasEnRonda = 6;
-		}
-		if(ronda == 3){
+			break;
+		case 3:
 			numeroDeCartasEnRonda = 8;
-		}
-		if(ronda == 4){
+			break;
+		case 4:
 			numeroDeCartasEnRonda = 10;
-		}
-		if(ronda ==5){
+			break;
+		case 5:
 			numeroDeCartasEnRonda = 12;
+			break;
 		}
-	
+		
 		for(int i=0; i<numeroDeCartasEnRonda;i++){
 			cartasEnJuego.add(cartas.get(i)); 
 		}
