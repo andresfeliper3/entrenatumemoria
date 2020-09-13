@@ -5,14 +5,13 @@
     <id>UMLClass</id>
     <coordinates>
       <x>310</x>
-      <y>690</y>
+      <y>520</y>
       <w>130</w>
       <h>120</h>
     </coordinates>
     <panel_attributes>Carta
 --
 nombre
-int posicion
 boolean visible
 --
 voltearCarta()
@@ -81,11 +80,11 @@ main()</panel_attributes>
       <x>360</x>
       <y>420</y>
       <w>60</w>
-      <h>290</h>
+      <h>120</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-
 m1=4-12</panel_attributes>
-    <additional_attributes>10.0;270.0;10.0;10.0</additional_attributes>
+    <additional_attributes>10.0;100.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
@@ -109,23 +108,5 @@ m1=4-12</panel_attributes>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-
 m1=1</panel_attributes>
     <additional_attributes>110.0;10.0;10.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>UMLNote</id>
-    <coordinates>
-      <x>50</x>
-      <y>460</y>
-      <w>270</w>
-      <h>190</h>
-    </coordinates>
-    <panel_attributes>Note..
-
-1-desordenar arreglo con todas las cartas 
-2-copiar los primeros elementos 
-f(ronda) y desordenar
-
-bg=blue
-</panel_attributes>
-    <additional_attributes/>
   </element>
 </diagram>

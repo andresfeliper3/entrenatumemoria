@@ -3,14 +3,12 @@ package entrenaTuMemoria;
 public class Carta {
 	
 	private String nombre;
-	private int posicion;
 	private boolean visible;
 	
 	//Constructor
 	public Carta(String nombre) {
 		this.nombre = nombre;
-		posicion = 0; //posición inicial, antes de comenzar el juego
-		visible = true;
+		this.visible = true;
 	}
 	
 	//Hace que una carta deje de ser visible
