@@ -17,10 +17,10 @@ public class ControlEntrenaTuMemoria {
 	private boolean modoVista; //Boca arriba true, boca abajo false
 
 	
-	public ControlEntrenaTuMemoria() //Constructor
-	{
+	public ControlEntrenaTuMemoria(){ //Constructor
+	
 		//Cartas
-		cplusplus = new Carta("Cplusplus");
+		cplusplus = new Carta("C++");
 		java = new Carta("Java");
 		javaScript = new Carta("JavaScript");
 		python = new Carta("Python");
@@ -35,8 +35,8 @@ public class ControlEntrenaTuMemoria {
 		ronda = 1;
 		estado= true;
 		
-		cartas = new ArrayList<>(); 
-		cartasEnJuego = new ArrayList<>();
+		cartas = new ArrayList<Carta>(); 
+		cartasEnJuego = new ArrayList<Carta>();
 		
 		//Agregar cartas a la lista de cartas
 		cartas.add(cplusplus);
@@ -58,116 +58,119 @@ public class ControlEntrenaTuMemoria {
 	}
 
 	//ordena aleatoriamente una lista de cartas
-	private ArrayList<Carta> ordenarCartas(ArrayList<Carta> lista)
-	{
+	private ArrayList<Carta> ordenarCartas(ArrayList<Carta> lista){
 		Collections.shuffle(lista);
 		return lista;
 	}
 	 
 	//Determina las cartas que se usarán en el juego
-	public void mostrarCartasEnJuego()
-	{
+	public void mostrarCartasEnJuego(){
+		
 		cartasEnJuego.clear();
 		
-		if(ronda == 1)
-		{
+		if(ronda == 1){
 			numeroDeCartasEnRonda = 4;
 		}
-		if(ronda == 2)
-		{
+		if(ronda == 2){
 			numeroDeCartasEnRonda = 6;
 		}
-		if(ronda == 3)
-		{
+		if(ronda == 3){
 			numeroDeCartasEnRonda = 8;
 		}
-		if(ronda == 4)
-		{
+		if(ronda == 4){
+			numeroDeCartasEnRonda = 10;
+		}
+		if(ronda ==5){
 			numeroDeCartasEnRonda = 12;
 		}
-		
-		for(int i=0; i<numeroDeCartasEnRonda;i++)
-		{
+	
+		for(int i=0; i<numeroDeCartasEnRonda;i++){
 			cartasEnJuego.add(cartas.get(i)); 
 		}
 		
 		cartasEnJuego = ordenarCartas(cartasEnJuego);
+		getCartaEnJuego();
 		
 	}
 	//Pasar a la siguiente ronda
-	private void pasarRonda()
-	{
-			this.ronda++;
-		
+	private void pasarRonda(){	
+
+		this.ronda++;
 		getCartaEnJuego();
 	}
-	
-	//examina el estado del juego, si avanzas a la siguiente ronda o perdiste.
-	public void determinarEstadoJuego()
-	{
-		if(cartaEnJuego == cartaEscogida)
-		{
-			estado= true;
-			pasarRonda(); //avanza a la siguiente ronda
+	//devuelve a la ronda anterior
+	private void devolverRonda(){
+		if(ronda>1){
 			
+			this.ronda--;
+			getCartaEnJuego();
+		}else {
+			getCartaEnJuego();
 		}
-		else
-		{
-			estado = false; //Perdio 
+		
+	}
+	//examina el estado del juego, si avanzas a la siguiente ronda o perdiste.
+	public void determinarEstadoJuego(){
+		
+		if(cartaEnJuego == cartaEscogida){
+			
+			estado= true;
+			pasarRonda(); //avanza a la siguiente ronda	
+		}
+		else{
+			estado = false; //Perdio
+			devolverRonda();
 		}
 	}
 	
 	//voltea las cartas
-	public void voltearCarta(boolean bolean) 
-	{
+	public void voltearCartas(boolean bolean) {
+
+		for(int i=0;i<cartasEnJuego.size();i++){
+			
+			cartasEnJuego.get(i).voltearCarta(bolean);
+		}
 		this.modoVista = bolean;
 	}
 	
 	//Dice que carta escogió el usuario de la lista de cartas (GUI manda la posición de la carta escogida)
-	public void setCartaClickeada(int posicionCarta)
-	{
+	public void setCartaClickeada(int posicionCarta){
 		this.cartaEscogida = cartasEnJuego.get(posicionCarta);
 	}
 	
 	//dice si la carta está boca abajo (false) o boca arriba (true)
-	public boolean getModoVista()
-	{
+	public boolean getModoVista(){
 		return modoVista;
 	}
 	//Escoge la carta a buscar en la ronda del juego de la lista de Cartas en Juego
-	public void getCartaEnJuego()
-	{
+	public void getCartaEnJuego(){
 		Random random = new Random();
 		int posicionCarta = random.nextInt(cartasEnJuego.size());
 		cartaEnJuego = cartasEnJuego.get(posicionCarta);
+		
 	}
 	
 	//retorna el número de la ronda que se está jugando
-	public int getRondaActual()
-	{
+	public int getRondaActual(){
 		return ronda;
 	}
 	
 	//retorna el estado del juego
-	public boolean getEstado()
-	{
+	public boolean getEstado(){
 		return estado;
 	}
 	
 	//retorna el array de cartas en la ronda actual
-	public ArrayList<Carta> getCartasEnJuego()
-	{
+	public ArrayList<Carta> getCartasEnJuego(){
 		return cartasEnJuego;
 	}
 	//Retorna la carta que se debe buscar
-	public Carta cualEsLaCarta()
-	{
+	public Carta cualEsLaCarta(){
 		return cartaEnJuego;
 	}
 		
 	//
-	public Carta getCartaEscogida()
-	{
+	public Carta getCartaEscogida(){
 		return cartaEscogida;
 	}
 }
