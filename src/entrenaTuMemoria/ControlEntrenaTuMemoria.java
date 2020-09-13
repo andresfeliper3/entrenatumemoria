@@ -1,23 +1,73 @@
+/* Autores: Jose David Barona Hernández - 1727590
+ * 				 Andrés Felipe Rincón	- 1922840
+ * Correos: jose.david.barona@correounivalle.edu.co 
+ * 			andres.rincon.lopez@correounivalle.edu.co
+ * Mini proyecto 1: Juego Entrena Tu Memoria
+ * Fecha: 13/09/2020
+ * 
+ * */
 package entrenaTuMemoria;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class ControlEntrenaTuMemoria.
+ * Esta clase maneja la lógica del juego. Distribuya las cartas aleatoriamente según la ronda y decide si el usuario pierde o gana al hacer click en una carta.
+ */
 public class ControlEntrenaTuMemoria {
 	
-	private int ronda; //número de la ronda actual
-	private int numeroDeCartasEnRonda; //Para hacer la array dinámica, se utiliza una variable auxiliar
-	private ArrayList<Carta> cartas; //array de cartas actuales
+	/** The ronda.
+	 * Número de la ronda actual. Va de 1 a 5. */
+	private int ronda; 
+	
+	/** The numero de cartas en ronda. 
+	 * Para hacer el arrayList de cartas.*/
+	private int numeroDeCartasEnRonda; 
+	
+	/** The cartas.
+	 * ArrayList de todas las cartas existentes */
+	private ArrayList<Carta> cartas; 
+	
+	/** The cartas en juego.
+	 * ArrayList de cartas seleccionadas para la ronda */
 	private ArrayList<Carta> cartasEnJuego;
-	private Carta cplusplus, java, javaScript, python, ruby, php, rust, kotlin, go, swift, prolog, racket; //Cartas que pueden usarse
+	
+	private Carta cplusplus, java, javaScript, python, ruby, php, rust, kotlin, go, swift, prolog, racket;
+	
+	/** The carta en juego. 
+	 * Carta seleccionada aleatoriamente para mostrar al usuario.
+	 * */
 	private Carta cartaEnJuego;
+	
+	/** The carta escogida.
+	 * Carta escogida por el usuario al hacer click.
+	 *  */
 	private Carta cartaEscogida;
+	
+	/** The estado.
+	 * Estado del juego: true si gana la ronda, false si pierde la ronda.
+	 *  */
 	private boolean estado;
-	private boolean modoVista; //Boca arriba true, boca abajo false
+	
+	/** The modo vista. 
+	 * True si las imágenes de las cartas están visibles al usuario, false en caso contrario.
+	 * */
+	private boolean modoVista; 
 
 	
-	public ControlEntrenaTuMemoria(){ //Constructor
+	/**
+	 * Constructor:
+	 * Instantiates a new control entrena tu memoria.
+	 * Crea las cartas y los dos arrayLists para el juego. 
+	 * Añade todas las cartas al primer ArrayList y las mezcla, para que cada juego sea diferente.
+	 * Las cartas del ArrayList "cartas" siempre son las mismas y mantienen su posición en un juego.
+	 * Las cartas del ArrayList "cartasEnJuego" cambian su posición y su cantidad dependiendo de la ronda.
+	 * Inicializa la ronda en 1 y el estado en true.
+	 */
+	public ControlEntrenaTuMemoria(){ 
 	
 		//Cartas
 		cplusplus = new Carta("C++");
@@ -32,7 +82,7 @@ public class ControlEntrenaTuMemoria {
 		swift = new Carta("Swift");
 		prolog = new Carta("Prolog");
 		racket = new Carta("Racket");
-		ronda = 1;
+		ronda = 6;
 		estado= true;
 		
 		cartas = new ArrayList<Carta>(); 
@@ -52,39 +102,44 @@ public class ControlEntrenaTuMemoria {
 		cartas.add(racket);
 		cartas.add(kotlin);
 		
-		
-		cartas = ordenarCartas(cartas); //Desordena todas las cartas al iniciar el juego
-		
+		//Desordena todas las cartas al iniciar el juego
+		cartas = ordenarCartas(cartas); 
 	}
-
-	//ordena aleatoriamente una lista de cartas
+	/**
+	 * Ordenar cartas.
+	 * 
+	 * Ordena aleatoriamente una lista de cartas 
+	 * 
+	 * @param lista the lista recibe una lista de tipo Carta
+	 * @return the array list retorna una lista de tipo Carta
+	 * */
 	private ArrayList<Carta> ordenarCartas(ArrayList<Carta> lista){
 		Collections.shuffle(lista);
 		return lista;
 	}
-	 
-	//Determina las cartas que se usarán en el juego
+	/**
+	 * Mostrar cartas en juego.
+	 * 
+	 * Determina las cartas que se usarán en el juego según la ronda, las añade al arrayList con las cartas en juego y las mezcla para que cambien de posiciones en cada ronda.
+	 */	
 	public void mostrarCartasEnJuego(){
 		
 		cartasEnJuego.clear();
 		
-		switch(ronda)
-		{
-		case 1:
+		if(ronda==1) {
 			numeroDeCartasEnRonda = 4;
-			break;
-		case 2:
+		}
+		if(ronda==2) {
 			numeroDeCartasEnRonda = 6;
-			break;
-		case 3:
+		}
+		if(ronda==3) {
 			numeroDeCartasEnRonda = 8;
-			break;
-		case 4:
+		}
+		if(ronda==4) {
 			numeroDeCartasEnRonda = 10;
-			break;
-		case 5:
+		}
+		if(ronda>=5) {
 			numeroDeCartasEnRonda = 12;
-			break;
 		}
 		
 		for(int i=0; i<numeroDeCartasEnRonda;i++){
@@ -92,41 +147,53 @@ public class ControlEntrenaTuMemoria {
 		}
 		
 		cartasEnJuego = ordenarCartas(cartasEnJuego);
-		getCartaEnJuego();
-		
+		setCartaEnJuego();
 	}
-	//Pasar a la siguiente ronda
+	
+	/**
+	 * Pasar ronda.
+	 * Pasa a la siguiente ronda.
+	 */
 	private void pasarRonda(){	
 
 		this.ronda++;
-		getCartaEnJuego();
+		setCartaEnJuego();
 	}
-	//devuelve a la ronda anterior
+	/**
+	 * Devolver ronda.
+	 * Devuelve a la ronda anterior.
+	 */	
 	private void devolverRonda(){
-		if(ronda>1){
-			
+		if(ronda>1){		
 			this.ronda--;
-			getCartaEnJuego();
+			setCartaEnJuego();
 		}else {
-			getCartaEnJuego();
+			setCartaEnJuego();
 		}
-		
 	}
-	//examina el estado del juego, si avanzas a la siguiente ronda o perdiste.
+	
+	/**
+	 * Determinar estado juego. 
+	 * Examina el estado del juego, si el usuario avanza a la siguiente ronda o pierde.
+	 */
 	public void determinarEstadoJuego(){
 		
 		if(cartaEnJuego == cartaEscogida){
 			
 			estado= true;
-			pasarRonda(); //avanza a la siguiente ronda	
+			pasarRonda();
 		}
 		else{
-			estado = false; //Perdio
+			estado = false;
 			devolverRonda();
 		}
 	}
-	
-	//voltea las cartas
+	/**
+	 * Voltear cartas.
+	 * 
+	 * Voltea todas las cartas que hayan en la ronda de juego.	
+	 * @param bolean the bolean
+	 */
 	public void voltearCartas(boolean bolean) {
 
 		for(int i=0;i<cartasEnJuego.size();i++){
@@ -135,44 +202,72 @@ public class ControlEntrenaTuMemoria {
 		}
 		this.modoVista = bolean;
 	}
+	/**
+	 * Sets the carta clickeada.
+	 * Recibe la posición de la carta clickeada por el usuario.
+	 * @param posicionCarta the new carta clickeada
+	 */
 	
-	//Dice que carta escogió el usuario de la lista de cartas (GUI manda la posición de la carta escogida)
 	public void setCartaClickeada(int posicionCarta){
 		this.cartaEscogida = cartasEnJuego.get(posicionCarta);
 	}
-	
-	//dice si la carta está boca abajo (false) o boca arriba (true)
+	/**
+	 * Gets the modo vista.
+	 * Dice si las cartas están boca abajo (false) o boca arriba (true)
+	 * @return the modo vista
+	 */
 	public boolean getModoVista(){
 		return modoVista;
 	}
-	//Escoge la carta a buscar en la ronda del juego de la lista de Cartas en Juego
-	public void getCartaEnJuego(){
+	/**
+	 *	Determina la carta para mostrar al usuario escogida aleatoriamente en la ronda de juego de la lista de cartas. 
+	 *
+	 * @return the carta en juego
+	 */
+	private void setCartaEnJuego(){
 		Random random = new Random();
 		int posicionCarta = random.nextInt(cartasEnJuego.size());
 		cartaEnJuego = cartasEnJuego.get(posicionCarta);
-		
 	}
-	
-	//retorna el número de la ronda que se está jugando
+	/**
+	 * Gets the ronda actual.
+	 * retorna el número de la ronda que se está jugando
+	 * @return the ronda actual
+	 */
 	public int getRondaActual(){
 		return ronda;
 	}
 	
-	//retorna el estado del juego
+	/**
+	 * Gets the estado.
+	 * retorna el estado del juego
+	 * @return the estado
+	 */
 	public boolean getEstado(){
 		return estado;
 	}
-	
-	//retorna el array de cartas en la ronda actual
+	/**
+	 * Gets the cartas en juego.
+	 * retorna el array de cartas en la ronda actual
+	 * @return the cartas en juego
+	 */
 	public ArrayList<Carta> getCartasEnJuego(){
 		return cartasEnJuego;
 	}
-	//Retorna la carta que se debe buscar
+	/**
+	 * Cual es la carta.
+	 * Retorna la carta que el usuario debe buscar.
+	 * @return the carta
+	 */
 	public Carta cualEsLaCarta(){
 		return cartaEnJuego;
 	}
-		
-	//
+	/**
+	 * Gets the carta escogida.
+	 * Retorna la carta escogida por el usuario al hacer click.
+	 *
+	 * @return the carta escogida
+	 */
 	public Carta getCartaEscogida(){
 		return cartaEscogida;
 	}

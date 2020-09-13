@@ -1,3 +1,11 @@
+/* Autores: Jose David Barona Hernández - 1727590
+ * 				 Andrés Felipe Rincón	- 1922840
+ * Correos: jose.david.barona@correounivalle.edu.co 
+ * 			andres.rincon.lopez@correounivalle.edu.co
+ * Mini proyecto 1: Juego Entrena Tu Memoria
+ * Fecha: 13/09/2020
+ * 
+ * */
 package entrenaTuMemoria;
 
 import java.awt.Color;
@@ -25,25 +33,26 @@ import javax.swing.JPanel;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 
-
-
+// TODO: Auto-generated Javadoc
+/**
+ * The Class VistaGUIEntrenaTuMemoria.
+ */
 public class VistaGUIEntrenaTuMemoria extends JFrame {
 
-	//atributos
-	
 		private JLabel mensaje,carta,ronda;
 		private ImageIcon imagen;
 		private ArrayList<JLabel> cartasEnJuego;
 		private Escucha escucha;
 		private ControlEntrenaTuMemoria controlMemoria;
-		private Timer timer,timer2;
+		private Timer timer;
 		private JPanel zonaCartas,zonaTop,zonaMensaje,zonaRonda;
 		private JFrame referenciaGUI;
 		private int contador;
-
-	//métodos
-	
-	public VistaGUIEntrenaTuMemoria(){ //Constructor
+	/**
+	 * Instantiates a new vista GUI entrena tu memoria. 
+	 * Constructor de la clase que inicia los objetos auxiliares
+	 */
+	public VistaGUIEntrenaTuMemoria(){
 			
 		initGUI();
 		
@@ -57,6 +66,9 @@ public class VistaGUIEntrenaTuMemoria extends JFrame {
 		this.setVisible(true);
 
 	}
+		/**
+		 * Inits the GUI. 
+		 */
 		private void initGUI() {
 
 			//set up container - layout
@@ -73,7 +85,6 @@ public class VistaGUIEntrenaTuMemoria extends JFrame {
 			cartasEnJuego = new ArrayList<JLabel>();
 			
 			//set up GUIComponents add to window
-			
 			//zona Ronda
 			zonaRonda = new JPanel();
 			zonaRonda.setBackground(Color.WHITE);
@@ -129,8 +140,8 @@ public class VistaGUIEntrenaTuMemoria extends JFrame {
 			//Restricciones
 			constraints.gridx=0; 
 			constraints.gridy=3;
-			constraints.gridwidth=1; //Ocupa una columna
-			constraints.gridheight=1; //Ocupa una fila
+			constraints.gridwidth=1; 
+			constraints.gridheight=1;
 			constraints.fill=GridBagConstraints.LAST_LINE_END;
 			add(zonaCartas,constraints);
 			
@@ -138,7 +149,10 @@ public class VistaGUIEntrenaTuMemoria extends JFrame {
 			empezarJuego();
 		}
 		
-		//Método que se encarga de repintar el juego dependiendo de la ronda en que se encuentre
+		/**
+		 * Empezar juego. 
+		 * Inicia la ronda de juego
+		 */
 		private void empezarJuego(){
 			
 			//Ejecución del timer
@@ -174,47 +188,53 @@ public class VistaGUIEntrenaTuMemoria extends JFrame {
 				contador=30;
 				timer.scheduleAtFixedRate(task, 0, 1000);
 			}
-			
 		}
 
-		//devuelve el ancho que debería tener el JPanel "zonaCartas" dependiendo de las cartas que hayan en juego
+		/**
+		 * Gets the dimension X.
+		 *	Método auxiliar que ayuda a redimensionar el eje X del JPanel dependiendo del número de la ronda
+		 * @param control the control recibe un objeto de tipo controlEntrenaTuMemoria
+		 * @return the dimension X retorna la dimensión en X(ancho) que debería de tener el JPanel
+		 */
 		private int getDimensionX(ControlEntrenaTuMemoria control){
 			
 			if(control.getRondaActual()==1){
-				
 				return 360;
 			}
 			if(control.getRondaActual()==2){
-				
 				return 480;
 			}
 			if(control.getRondaActual()==4){
-				
 				return 800;
 			}
-			else{ //ronda >= 3
-			
+			else{
 				return 660;
 			}
-
 		}
 		
-		//devuelve el alto que debería tener el JPanel "zonaCartas" dependiendo de las cartas que hayan en juego
+		/**
+		 * Gets the dimension Y.
+		 * Método auxiliar que ayuda a redimensionar el eje Y del JPanel dependiendo del número de la ronda
+		 * @param control the control recibe un objeto de tipo controlEntrenaTuMemoria
+		 * @return the dimension Y retorna la dimensión en Y(alto) que debería de tener el JPanel
+		 */
 		private int getDimensionY(ControlEntrenaTuMemoria control){
 			
 			if(control.getRondaActual()==1 || control.getRondaActual()==2 || control.getRondaActual()==3 || control.getRondaActual()==4){
 				return 300;
 			}
-			else{//ronda > 3
-			
+			else{
 				return 440;
 			}
 		}
 		
-		//voltea las cartas boca abajo
+		/**
+		 * Ocultar cartas.
+		 * voltea las cartas boca abajo, y re-asigna nuevo icono y mensaje al JLabel mensaje
+		 */
 		private void ocultarCartas(){
 			
-			controlMemoria.voltearCartas(false); //voltea las cartas boca abajo, y re-asigna nuevo icono y mensaje al JLabel mensaje
+			controlMemoria.voltearCartas(false); 
 			Border border = BorderFactory.createLineBorder(Color.BLACK, 5);
 			for(int i=0; i < controlMemoria.getCartasEnJuego().size();i++){
 				
@@ -228,40 +248,55 @@ public class VistaGUIEntrenaTuMemoria extends JFrame {
 			carta.setIcon(icono);
 		}
 		
-		//determina la cantidad de cartas tipo JLabel y asigna una escucha a cada uno de los elementos JLabel que deben haber en el ArrayList cartasEnJuego
+		/**
+		 * Crear cartas en juego.
+		 * Determina la cantidad de cartas tipo JLabel que estarán en la ronda de juego y asigna una escucha a cada uno de los elementos JLabel que deben haber en el ArrayList cartasEnJuego
+		 */
 		private void crearCartasEnJuego()
 		{
-			controlMemoria.voltearCartas(true); //voltea las cartas boca arriba
+			controlMemoria.voltearCartas(true);
 			Border border = BorderFactory.createLineBorder(Color.BLACK, 5);
 			
 			for(int i = 0; i < controlMemoria.getCartasEnJuego().size(); i++) {
 				imagen = new ImageIcon("src/imagenes/" + controlMemoria.getCartasEnJuego().get(i).getNombre() + ".png" );
 				cartasEnJuego.add(new JLabel(imagen));
-				cartasEnJuego.get(i).addMouseListener(escucha); //cada elemento le asiga una escucha de Mouse
+				cartasEnJuego.get(i).addMouseListener(escucha);
 				cartasEnJuego.get(i).setBorder(border);
 				zonaCartas.add(cartasEnJuego.get(i));
 			}
 		}
 		
-		//redimensiona la ventana dependiendo de la ronda
+		/**
+		 * Redimensionar ventana.
+		 * Redimensiona la ventana de juego
+		 */
+		
 		private void redimensionarVentana()
 		{
 			zonaCartas.setPreferredSize(new Dimension(getDimensionX(controlMemoria),getDimensionY(controlMemoria)));
 			referenciaGUI.pack();
-
 		}
 
+/**
+ * The Class Escucha.
+ * Este método permite ejecutar una acción dependiendo del lugar donde el usuario haga click
+ */
 class Escucha implements MouseListener{
 
+	/**
+	 * Mouse clicked.
+	 * Este método permite informar al usuario y hacer los respectivos cambios en el juego dependiendo de si el usuario gana o no la rond actual
+	 * @param eventMouse the event mouse
+	 */
 	@Override
 	public void mouseClicked(MouseEvent eventMouse){
 		// TODO Auto-generated method stub
 		
-		if(controlMemoria.getModoVista()==false){//Mira si las cartas están boca abajo (modoVista=false)
+		if(controlMemoria.getModoVista()==false){
 		
 			for(int i=0;i<cartasEnJuego.size();i++){
 				
-				if(eventMouse.getSource() == cartasEnJuego.get(i)){//busca cuál carta le dio click
+				if(eventMouse.getSource() == cartasEnJuego.get(i)){
 					controlMemoria.setCartaClickeada(i);
 					controlMemoria.determinarEstadoJuego();
 					
@@ -292,24 +327,44 @@ class Escucha implements MouseListener{
 		}
 	}
 
+	/**
+	 * Mouse entered.
+	 *
+	 * @param e the e
+	 */
 	@Override
 	public void mouseEntered(MouseEvent e) {
 		// TODO Auto-generated method stub
 		
 	}
 
+	/**
+	 * Mouse exited.
+	 *
+	 * @param e the e
+	 */
 	@Override
 	public void mouseExited(MouseEvent e) {
 		// TODO Auto-generated method stub
 		
 	}
 
+	/**
+	 * Mouse pressed.
+	 *
+	 * @param eventMouse the event mouse
+	 */
 	@Override
-	public void mousePressed(MouseEvent eventMouse) { //Escoger carta click
+	public void mousePressed(MouseEvent eventMouse) {
 		// TODO Auto-generated method stub
 
 	}
 
+	/**
+	 * Mouse released.
+	 *
+	 * @param e the e
+	 */
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		// TODO Auto-generated method stub
