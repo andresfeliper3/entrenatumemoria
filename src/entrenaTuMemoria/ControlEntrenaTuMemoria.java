@@ -82,7 +82,7 @@ public class ControlEntrenaTuMemoria {
 		swift = new Carta("Swift");
 		prolog = new Carta("Prolog");
 		racket = new Carta("Racket");
-		ronda = 6;
+		ronda = 1;
 		estado= true;
 		
 		cartas = new ArrayList<Carta>(); 
