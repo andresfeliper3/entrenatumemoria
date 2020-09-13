@@ -171,7 +171,7 @@ public class VistaGUIEntrenaTuMemoria extends JFrame {
 
 			if(controlMemoria.getModoVista())
 			{
-				contador=5;
+				contador=30;
 				timer.scheduleAtFixedRate(task, 0, 1000);
 			}
 			
