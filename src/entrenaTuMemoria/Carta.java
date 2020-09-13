@@ -14,8 +14,8 @@ public class Carta {
 	}
 	
 	//Hace que una carta deje de ser visible
-	public void voltearCarta() {
-		this.visible = false;
+	public void voltearCarta(boolean estadoCarta) {
+		this.visible = estadoCarta;
 	}
 	
 	//Retorna el nombre de la carta
